@@ -40,7 +40,6 @@ class Autoregister_Notification extends ApiEnabled_Notification
     }
     //TODO
     //db change
-    //qtip
     //adapt existing changes/callbacks to list
     ///** when created, take all comm and add them to db */
     /* when a comm is deleted, if in our db, remove it */

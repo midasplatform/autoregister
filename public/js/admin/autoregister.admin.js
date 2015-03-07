@@ -5,13 +5,11 @@ midas.autoregister.invertRow = function(source, communityId) {
     'use strict';
     var dest = source === 'targeted' ? 'ignored' : 'targeted';
     var tr = $('#'+source+'CommunityRow'+communityId).remove();
-    var actionA = tr.find('a[qtip]');
+    var actionA = tr.find('a.tableActions');
     var imgSrc = actionA.find('img').attr('src');
     if (source === 'ignored') {
-        actionA.attr('qtip', 'Remove community from autoregister targeted list');
         actionA.find('img').attr('src', imgSrc.replace('add', 'close'));
     } else {
-        actionA.attr('qtip', 'Add community to autoregister targeted list');
         actionA.find('img').attr('src', imgSrc.replace('close', 'add'));
     }
     actionA.removeAttr('onclick');

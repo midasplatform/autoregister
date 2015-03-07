@@ -51,7 +51,7 @@ $this->headScript()->appendFile($this->moduleWebroot.'/public/js/admin/autoregis
                             echo '<tr id="targetedCommunityRow'.$target->getKey().'" class='.$this->escape($class).'>';
                             echo '  <td width="80%"><a href="/community/'.$target->getCommunityId().'">'.$target->getName().'</a></td>';
                             echo '  <td><span class="actionsList">';
-                            echo '  <a qtip="Remove community from autoregister targeted list" '.' class="tableActions promoteMember" onclick="midas.autoregister.registerCommunity('.$this->escape($target->getCommunityId()).', \'ignore\');">';
+                            echo '  <a class="tableActions promoteMember" onclick="midas.autoregister.registerCommunity('.$this->escape($target->getCommunityId()).', \'ignore\');">';
                             echo '    <img class="tableActions" alt="" src="'.$this->coreWebroot.'/public/images/icons/close.png" /></a>';
                             echo '  </span></td>';
                             echo '</tr>';
@@ -80,7 +80,7 @@ $this->headScript()->appendFile($this->moduleWebroot.'/public/js/admin/autoregis
                             echo '<tr id="ignoredCommunityRow'.$ignore->getKey().'" class='.$this->escape($class).'>';
                             echo '  <td width="80%"><a href="/community/'.$ignore->getCommunityId().'">'.$ignore->getName().'</a></td>';
                             echo '  <td><span class="actionsList">';
-                            echo '  <a qtip="Add community to autoregister targeted list" '.' class="tableActions promoteMember" onclick="midas.autoregister.registerCommunity('.$this->escape($ignore->getCommunityId()).', \'target\');">';
+                            echo '  <a class="tableActions promoteMember" onclick="midas.autoregister.registerCommunity('.$this->escape($ignore->getCommunityId()).', \'target\');">';
                             echo '    <img class="tableActions" alt="" src="'.$this->coreWebroot.'/public/images/icons/add.png" /></a>';
                             echo '  </span></td>';
                             echo '</tr>';
