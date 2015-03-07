@@ -39,6 +39,7 @@ class Autoregister_Notification extends ApiEnabled_Notification
         $this->addCallBack('CALLBACK_CORE_NEW_COMMUNITY_ADDED', 'handleCommunityAdded');
     }
     //TODO
+    //  default value
     //db change
     //adapt existing changes/callbacks to list
     ///** when created, take all comm and add them to db */
@@ -50,9 +51,9 @@ class Autoregister_Notification extends ApiEnabled_Notification
      */
     public function handleUserAdded($params) {
         $user = $params['userDao'];
-        $communityModel = MidasLoader::loadModel('Community');
+        $targetedcommunityModel = MidasLoader::loadModel('Targetedcommunity', 'autoregister');
+        $communities = $targetedcommunityModel->getAllTargeted();
         $groupModel = MidasLoader::loadModel('Group');
-        $communities = $communityModel->getAll();
         foreach ($communities as $community) {
             $memberGroup = $community->getMemberGroup();
             $groupModel->addUser($memberGroup, $user);
