@@ -45,7 +45,15 @@ abstract class Autoregister_TargetedcommunityModelBase extends Autoregister_AppM
         $targetedcommunity = MidasLoader::newDao('TargetedcommunityDao', 'autoregister');
         $targetedcommunity->setCommunityId($community->getCommunityId());
         $this->save($targetedcommunity);
-    } else {
+        // now add all users as members
+        $groupModel = MidasLoader::loadModel('Group');
+        $userModel = MidasLoader::loadModel('User');
+        $users = $userModel->getAll();
+        $memberGroup = $community->getMemberGroup();
+        foreach ($users as $user) {
+            $groupModel->addUser($memberGroup, $user);
+        }
+     } else {
         $targetedcommunity = $targetedcommunities[0];
     }
 
