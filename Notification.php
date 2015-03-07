@@ -37,9 +37,8 @@ class Autoregister_Notification extends ApiEnabled_Notification
         $this->enableWebAPI($this->moduleName);
         $this->addCallBack('CALLBACK_CORE_NEW_USER_ADDED', 'handleUserAdded');
         $this->addCallBack('CALLBACK_CORE_NEW_COMMUNITY_ADDED', 'handleCommunityAdded');
+        $this->addCallBack('CALLBACK_CORE_COMMUNITY_DELETED', 'handleCommunityDeleted');
     }
-    //TODO
-    //  when a comm is deleted, if in our db, remove it */
 
     /**
      *
@@ -69,4 +68,15 @@ class Autoregister_Notification extends ApiEnabled_Notification
             $targetedcommunityModel->targetCommunity($community);
         }
     }
+
+    /**
+     *
+     * @param array $params parameters
+     */
+    public function handleCommunityDeleted($params) {
+        $community = $params['community'];
+        $targetedcommunityModel = MidasLoader::loadModel('Targetedcommunity', 'autoregister');
+        $targetedcommunityModel->ignoreCommunity($community);
+    }
+
 }
