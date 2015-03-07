@@ -39,12 +39,8 @@ class Autoregister_Notification extends ApiEnabled_Notification
         $this->addCallBack('CALLBACK_CORE_NEW_COMMUNITY_ADDED', 'handleCommunityAdded');
     }
     //TODO
-    //  default value
-    //db change
-    //adapt existing changes/callbacks to list
-    ///** when created, take all comm and add them to db */
-    /* when a comm is deleted, if in our db, remove it */
-    /* this db is comm and then a boolean that is registered */
+    //  when a comm is deleted, if in our db, remove it */
+
     /**
      *
      * @param array $params parameters
@@ -65,13 +61,12 @@ class Autoregister_Notification extends ApiEnabled_Notification
      * @param array $params parameters
      */
     public function handleCommunityAdded($params) {
-        $community = $params['community'];
-        $groupModel = MidasLoader::loadModel('Group');
-        $userModel = MidasLoader::loadModel('User');
-        $users = $userModel->getAll();
-        $memberGroup = $community->getMemberGroup();
-        foreach ($users as $user) {
-            $groupModel->addUser($memberGroup, $user);
+        $settingModel = MidasLoader::loadModel('Setting');
+        $default = $settingModel->getValueByName('defaultAutoregister', 'autoregister');
+        if ($default === 'true') {
+            $community = $params['community'];
+            $targetedcommunityModel = MidasLoader::loadModel('Targetedcommunity', 'autoregister');
+            $targetedcommunityModel->targetCommunity($community);
         }
     }
 }

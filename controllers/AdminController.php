@@ -25,6 +25,8 @@ class Autoregister_AdminController extends Autoregister_AppController
     /** Index action */
     public function indexAction() {
         $this->requireAdminPrivileges();
+        $settingModel = MidasLoader::loadModel('Setting');
+        $this->view->defaultAutoregister = $settingModel->getValueByName('defaultAutoregister', 'autoregister');
         $communityModel = MidasLoader::loadModel('Community');
         $targetedcommunityModel = MidasLoader::loadModel('Targetedcommunity', 'autoregister');
         $this->view->targeted = $targetedcommunityModel->getAllTargeted();

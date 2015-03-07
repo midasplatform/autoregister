@@ -42,3 +42,15 @@ midas.autoregister.registerCommunity = function(communityId, registerAction) {
         }
     });
 }
+
+$('#defaultNewCommunityAutoregister').change(function (t) {
+    var defaultAutoregister = $(this).is(':checked');
+    'use strict';
+    ajaxWebApi.ajax({
+        method: 'midas.autoregister.default.autoregister.setting',
+        args: 'default=' + defaultAutoregister,
+        success: function(response) {
+            // nothing needed to be done
+        }
+    });
+});

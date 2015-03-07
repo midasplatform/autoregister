@@ -31,7 +31,14 @@ $this->headScript()->appendFile($this->moduleWebroot.'/public/js/admin/autoregis
 <div class="viewMain">
     <h1><?php echo $this->escape($this->pageTitle); ?></h1>
 
-    <h4><?php echo $this->t('DEFAULT CHECKBOX') ?>:</h4>
+    <h4><?php echo $this->t('Default behavior for new Communities') ?></h4>
+    <div id='newCommunityDefault'>
+        <span>
+        <input type='checkbox' id='defaultNewCommunityAutoregister' <?php if ($this->defaultAutoregister === 'true') { echo "checked"; } ?> style='margin-right: 20px'>
+            Newly created Communities are added to Autoregister list
+        </span>
+    </div>
+
 
     <h4><?php echo $this->t('Communities Targeted by Autoregister') ?></h4>
     <div id='targetedList'>

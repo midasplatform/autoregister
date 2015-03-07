@@ -25,18 +25,11 @@ class Autoregister_InstallScript extends MIDASModuleInstallScript
     /** @var string */
     public $moduleName = 'autoregister';
 
-    /** Post database install, add all users to all community member groups. */
+    /** Post database install. */
     public function postInstall() {
-        $userModel = MidasLoader::loadModel('User');
-        $users = $userModel->getAll();
-        $communityModel = MidasLoader::loadModel('Community');
-        $groupModel = MidasLoader::loadModel('Group');
-        $communities = $communityModel->getAll();
-        foreach ($communities as $community) {
-            $memberGroup = $community->getMemberGroup();
-            foreach ($users as $user) {
-                $groupModel->addUser($memberGroup, $user);
-            }
-        }
+        // default autoregister to false for newly created communities
+        $settingModel = MidasLoader::loadModel('Setting');
+        $settingModel->setConfig('defaultAutoregister', 'false', 'autoregister');
     }
+
 }
