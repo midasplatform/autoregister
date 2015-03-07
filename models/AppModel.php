@@ -18,18 +18,8 @@
  limitations under the License.
 =========================================================================*/
 
-
-/** Install the autoregister module. */
-class Autoregister_InstallScript extends MIDASModuleInstallScript
-{
-    /** @var string */
-    public $moduleName = 'autoregister';
-
-    /** Post database install. */
-    public function postInstall() {
-        // default autoregister to false for newly created communities
-        $settingModel = MidasLoader::loadModel('Setting');
-        $settingModel->setConfig('defaultAutoregister', 'false', 'autoregister');
-    }
-
-}
+/** Base model class for the autoregister module */
+class Autoregister_AppModel extends MIDASModel
+  {
+  public $moduleName = 'autoregister';
+  }

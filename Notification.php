@@ -17,25 +17,27 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 =========================================================================*/
-
+require_once BASE_PATH . '/modules/api/library/APIEnabledNotification.php';
 /**
  * Notification manager for the autoregister module.
  *
  * @package Modules\Autoregister\Notification
  */
-class Autoregister_Notification extends MIDAS_Notification
+class Autoregister_Notification extends ApiEnabled_Notification
 {
     /** @var string */
     public $moduleName = 'autoregister';
+    public $_moduleComponents = array('Api');
 
     /**  Initialize the notification process. */
     public function init() {
         $fc = Zend_Controller_Front::getInstance();
         $this->moduleWebroot = $fc->getBaseUrl().'/modules/'.$this->moduleName;
         $this->coreWebroot = $fc->getBaseUrl().'/core';
-
+        $this->enableWebAPI($this->moduleName);
         $this->addCallBack('CALLBACK_CORE_NEW_USER_ADDED', 'handleUserAdded');
         $this->addCallBack('CALLBACK_CORE_NEW_COMMUNITY_ADDED', 'handleCommunityAdded');
+        $this->addCallBack('CALLBACK_CORE_COMMUNITY_DELETED', 'handleCommunityDeleted');
     }
 
     /**
@@ -44,9 +46,9 @@ class Autoregister_Notification extends MIDAS_Notification
      */
     public function handleUserAdded($params) {
         $user = $params['userDao'];
-        $communityModel = MidasLoader::loadModel('Community');
+        $targetedcommunityModel = MidasLoader::loadModel('Targetedcommunity', 'autoregister');
+        $communities = $targetedcommunityModel->getAllTargeted();
         $groupModel = MidasLoader::loadModel('Group');
-        $communities = $communityModel->getAll();
         foreach ($communities as $community) {
             $memberGroup = $community->getMemberGroup();
             $groupModel->addUser($memberGroup, $user);
@@ -58,13 +60,23 @@ class Autoregister_Notification extends MIDAS_Notification
      * @param array $params parameters
      */
     public function handleCommunityAdded($params) {
-        $community = $params['community'];
-        $groupModel = MidasLoader::loadModel('Group');
-        $userModel = MidasLoader::loadModel('User');
-        $users = $userModel->getAll();
-        $memberGroup = $community->getMemberGroup();
-        foreach ($users as $user) {
-            $groupModel->addUser($memberGroup, $user);
+        $settingModel = MidasLoader::loadModel('Setting');
+        $default = $settingModel->getValueByName('defaultAutoregister', 'autoregister');
+        if ($default === 'true') {
+            $community = $params['community'];
+            $targetedcommunityModel = MidasLoader::loadModel('Targetedcommunity', 'autoregister');
+            $targetedcommunityModel->targetCommunity($community);
         }
     }
+
+    /**
+     *
+     * @param array $params parameters
+     */
+    public function handleCommunityDeleted($params) {
+        $community = $params['community'];
+        $targetedcommunityModel = MidasLoader::loadModel('Targetedcommunity', 'autoregister');
+        $targetedcommunityModel->ignoreCommunity($community);
+    }
+
 }

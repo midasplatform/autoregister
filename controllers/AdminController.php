@@ -18,18 +18,20 @@
  limitations under the License.
 =========================================================================*/
 
-
-/** Install the autoregister module. */
-class Autoregister_InstallScript extends MIDASModuleInstallScript
+/** Admin controller for the autoregister module. */
+class Autoregister_AdminController extends Autoregister_AppController
 {
-    /** @var string */
-    public $moduleName = 'autoregister';
 
-    /** Post database install. */
-    public function postInstall() {
-        // default autoregister to false for newly created communities
+    /** Index action */
+    public function indexAction() {
+        $this->requireAdminPrivileges();
         $settingModel = MidasLoader::loadModel('Setting');
-        $settingModel->setConfig('defaultAutoregister', 'false', 'autoregister');
+        $this->view->defaultAutoregister = $settingModel->getValueByName('defaultAutoregister', 'autoregister');
+        $communityModel = MidasLoader::loadModel('Community');
+        $targetedcommunityModel = MidasLoader::loadModel('Targetedcommunity', 'autoregister');
+        $this->view->targeted = $targetedcommunityModel->getAllTargeted();
+        $this->view->ignored = $targetedcommunityModel->getAllIgnored();
+        $this->view->pageTitle = 'Autoregister Module Configuration';
+        session_start();
     }
-
 }
