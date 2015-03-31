@@ -18,8 +18,8 @@
  limitations under the License.
 =========================================================================*/
 
-/** Upgrade the autoregister module to version 1.1.0. */
-class Autoregister_Upgrade_1_1_0 extends MIDASUpgrade
+/** Upgrade the autoregister module to version 1.0.1. */
+class Autoregister_Upgrade_1_0_1 extends MIDASUpgrade
 {
     /** @var string */
     public $moduleName = 'autoregister';
