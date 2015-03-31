@@ -48,10 +48,19 @@ abstract class Autoregister_TargetedcommunityModelBase extends Autoregister_AppM
         // now add all users as members
         $groupModel = MidasLoader::loadModel('Group');
         $userModel = MidasLoader::loadModel('User');
-        $users = $userModel->getAll();
         $memberGroup = $community->getMemberGroup();
-        foreach ($users as $user) {
-            $groupModel->addUser($memberGroup, $user);
+        $limit = 50;
+        $offset = 0;
+        while(true) {
+            $users = $userModel->getAll(false, $limit, 'lastname', $offset);
+            foreach ($users as $user) {
+                $groupModel->addUser($memberGroup, $user);
+            }
+            if (count($users) < $limit) {
+                break;
+            } else {
+                $offset = $offset + $limit;
+            }
         }
      } else {
         $targetedcommunity = $targetedcommunities[0];

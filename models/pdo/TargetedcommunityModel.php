@@ -39,7 +39,6 @@ class Autoregister_TargetedcommunityModel extends Autoregister_Targetedcommunity
 
     /** gets all communities that aren't in the autoregister targeted list */
     public function getAllIgnored() {
-        $select = "select * from community where community_id not in (select community_id from autoregister_targetedcommunity";
         $communityModel = MidasLoader::loadModel('Community');
         $communities = $communityModel->getAll();
         $targeted = $this->getAllTargeted();
