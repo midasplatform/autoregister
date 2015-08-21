@@ -1,9 +1,9 @@
 <?php
 /*=========================================================================
- MIDAS Server
- Copyright (c) Kitware SAS. 26 rue Louis Guérin. 69100 Villeurbanne, FRANCE
+ Midas Server
+ Copyright Kitware SAS, 26 rue Louis Guérin, 69100 Villeurbanne, France.
  All rights reserved.
- More information http://www.kitware.com
+ For more information visit http://www.kitware.com/.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -17,20 +17,19 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 =========================================================================*/
-require_once BASE_PATH . '/modules/api/library/APIEnabledNotification.php';
-/**
- * Notification manager for the autoregister module.
- *
- * @package Modules\Autoregister\Notification
- */
+
+require_once BASE_PATH.'/modules/api/library/APIEnabledNotification.php';
+
+/** Notification manager for the autoregister module. */
 class Autoregister_Notification extends ApiEnabled_Notification
 {
     /** @var string */
     public $moduleName = 'autoregister';
     public $_moduleComponents = array('Api');
 
-    /**  Initialize the notification process. */
-    public function init() {
+    /** Initialize the notification process. */
+    public function init()
+    {
         $fc = Zend_Controller_Front::getInstance();
         $this->moduleWebroot = $fc->getBaseUrl().'/modules/'.$this->moduleName;
         $this->coreWebroot = $fc->getBaseUrl().'/core';
@@ -41,10 +40,10 @@ class Autoregister_Notification extends ApiEnabled_Notification
     }
 
     /**
-     *
      * @param array $params parameters
      */
-    public function handleUserAdded($params) {
+    public function handleUserAdded($params)
+    {
         $user = $params['userDao'];
         $targetedcommunityModel = MidasLoader::loadModel('Targetedcommunity', 'autoregister');
         $communities = $targetedcommunityModel->getAllTargeted();
@@ -56,10 +55,10 @@ class Autoregister_Notification extends ApiEnabled_Notification
     }
 
     /**
-     *
      * @param array $params parameters
      */
-    public function handleCommunityAdded($params) {
+    public function handleCommunityAdded($params)
+    {
         $settingModel = MidasLoader::loadModel('Setting');
         $default = $settingModel->getValueByName('defaultAutoregister', 'autoregister');
         if ($default === 'true') {
@@ -70,13 +69,12 @@ class Autoregister_Notification extends ApiEnabled_Notification
     }
 
     /**
-     *
      * @param array $params parameters
      */
-    public function handleCommunityDeleted($params) {
+    public function handleCommunityDeleted($params)
+    {
         $community = $params['community'];
         $targetedcommunityModel = MidasLoader::loadModel('Targetedcommunity', 'autoregister');
         $targetedcommunityModel->ignoreCommunity($community);
     }
-
 }

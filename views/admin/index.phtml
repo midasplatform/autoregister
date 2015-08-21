@@ -1,9 +1,9 @@
 <?php
 /*=========================================================================
- MIDAS Server
- Copyright (c) Kitware SAS. 26 rue Louis Guérin. 69100 Villeurbanne, FRANCE
+ Midas Server
+ Copyright Kitware SAS, 26 rue Louis Guérin, 69100 Villeurbanne, France.
  All rights reserved.
- More information http://www.kitware.com
+ For more information visit http://www.kitware.com/.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -32,71 +32,84 @@ $this->headScript()->appendFile($this->moduleWebroot.'/public/js/admin/autoregis
     <h1><?php echo $this->escape($this->pageTitle); ?></h1>
 
     <h4><?php echo $this->t('Default behavior for new Communities') ?></h4>
+
     <div id='newCommunityDefault'>
         <span>
-        <input type='checkbox' id='defaultNewCommunityAutoregister' <?php if ($this->defaultAutoregister === 'true') { echo "checked"; } ?> style='margin-right: 20px'>
+        <input type='checkbox' id='defaultNewCommunityAutoregister' <?php if ($this->defaultAutoregister === 'true') {
+            echo "checked";
+        } ?> style='margin-right: 20px'>
             Newly created Communities are added to Autoregister list
         </span>
     </div>
 
 
     <h4><?php echo $this->t('Communities Targeted by Autoregister') ?></h4>
+
     <div id='targetedList'>
         <table id='targetedListTable' class='tablesorter'>
             <thead>
-                <tr>
-                    <th width="80%" class="header">Community</th>
-                    <th class="header">Actions</th>
-                </tr>
+            <tr>
+                <th width="80%" class="header">Community</th>
+                <th class="header">Actions</th>
+            </tr>
             </thead>
             <tbody>
-                <?php
-                    $stripeIndex = 0;
-                    foreach ($this->targeted as $target) {
-                            $stripeIndex++;
-                            $class = $stripeIndex % 2 ? 'odd' : 'even';
-                            echo '<tr id="targetedCommunityRow'.$target->getKey().'" class='.$this->escape($class).'>';
-                            echo '  <td width="80%"><a href="/community/'.$target->getCommunityId().'">'.$target->getName().'</a></td>';
-                            echo '  <td><span class="actionsList">';
-                            echo '  <a class="tableActions promoteMember" onclick="midas.autoregister.registerCommunity('.$this->escape($target->getCommunityId()).', \'ignore\');">';
-                            echo '    <img class="tableActions" alt="" src="'.$this->coreWebroot.'/public/images/icons/close.png" /></a>';
-                            echo '  </span></td>';
-                            echo '</tr>';
-                }
-                ?>
-                </tbody>
-            </table>
-        </div>
+            <?php
+            $stripeIndex = 0;
+            foreach ($this->targeted as $target) {
+                $stripeIndex++;
+                $class = $stripeIndex % 2 ? 'odd' : 'even';
+                echo '<tr id="targetedCommunityRow'.$target->getKey().'" class='.$this->escape($class).'>';
+                echo '  <td width="80%"><a href="/community/'.$target->getCommunityId().'">'.$target->getName(
+                    ).'</a></td>';
+                echo '  <td><span class="actionsList">';
+                echo '  <a class="tableActions promoteMember" onclick="midas.autoregister.registerCommunity('.$this->escape(
+                        $target->getCommunityId()
+                    ).', \'ignore\');">';
+                echo '    <img class="tableActions" alt="" src="'.$this->coreWebroot.'/public/images/icons/close.png" /></a>';
+                echo '  </span></td>';
+                echo '</tr>';
+            }
+            ?>
+            </tbody>
+        </table>
+    </div>
 
     <h4><?php echo $this->t('Communities Ignored by Autoregister') ?></h4>
 
     <div id='ignoredList'>
         <table id='ignoredListTable' class='tablesorter'>
             <thead>
-                <tr>
-                    <th width="80%" class="header">Community</th>
-                    <th class="header">Actions</th>
-                </tr>
+            <tr>
+                <th width="80%" class="header">Community</th>
+                <th class="header">Actions</th>
+            </tr>
             </thead>
             <tbody>
-                <?php
-                    $stripeIndex = 0;
-                    foreach ($this->ignored as $ignore) {
-                            $stripeIndex++;
-                            $class = $stripeIndex % 2 ? 'odd' : 'even';
-                            echo '<tr id="ignoredCommunityRow'.$ignore->getKey().'" class='.$this->escape($class).'>';
-                            echo '  <td width="80%"><a href="/community/'.$ignore->getCommunityId().'">'.$ignore->getName().'</a></td>';
-                            echo '  <td><span class="actionsList">';
-                            echo '  <a class="tableActions promoteMember" onclick="midas.autoregister.registerCommunity('.$this->escape($ignore->getCommunityId()).', \'target\');">';
-                            echo '    <img class="tableActions" alt="" src="'.$this->coreWebroot.'/public/images/icons/add.png" /></a>';
-                            echo '  </span></td>';
-                            echo '</tr>';
-                }
-                ?>
-                </tbody>
-            </table>
-        </div>
+            <?php
+            $stripeIndex = 0;
+            foreach ($this->ignored as $ignore) {
+                $stripeIndex++;
+                $class = $stripeIndex % 2 ? 'odd' : 'even';
+                echo '<tr id="ignoredCommunityRow'.$ignore->getKey().'" class='.$this->escape($class).'>';
+                echo '  <td width="80%"><a href="/community/'.$ignore->getCommunityId().'">'.$ignore->getName(
+                    ).'</a></td>';
+                echo '  <td><span class="actionsList">';
+                echo '  <a class="tableActions promoteMember" onclick="midas.autoregister.registerCommunity('.$this->escape(
+                        $ignore->getCommunityId()
+                    ).', \'target\');">';
+                echo '    <img class="tableActions" alt="" src="'.$this->coreWebroot.'/public/images/icons/add.png" /></a>';
+                echo '  </span></td>';
+                echo '</tr>';
+            }
+            ?>
+            </tbody>
+        </table>
+    </div>
 
-        <p><a href="<?php echo $this->url(array('controller' => 'admin', 'action' => 'index'), 'default'); ?>#tabs-modules">&laquo; Back to Modules Administration</a></p>
+    <p><a href="<?php echo $this->url(
+            array('controller' => 'admin', 'action' => 'index'),
+            'default'
+        ); ?>#tabs-modules">&laquo; Back to Modules Administration</a></p>
 
 </div>

@@ -18,8 +18,21 @@
  limitations under the License.
 =========================================================================*/
 
-/** Base model class for the autoregister module. */
-class Autoregister_AppModel extends MIDASModel
-{
-    public $moduleName = 'autoregister';
-}
+$finder = Symfony\CS\Finder\DefaultFinder::create()
+    ->in(__DIR__);
+
+$config = Symfony\CS\Config\Config::create()
+    ->level(Symfony\CS\FixerInterface::SYMFONY_LEVEL)
+    ->fixers(array(
+        '-psr0',
+        '-blankline_after_open_tag',
+        '-phpdoc_no_empty_return',
+        '-phpdoc_params',
+        '-phpdoc_separation',
+        '-phpdoc_to_comment',
+        '-phpdoc_var_without_name',
+    ))
+    ->finder($finder)
+    ->setUsingCache(true);
+
+return $config;

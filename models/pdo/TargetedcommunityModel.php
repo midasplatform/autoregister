@@ -1,9 +1,9 @@
 <?php
 /*=========================================================================
- MIDAS Server
- Copyright (c) Kitware SAS. 26 rue Louis Guérin. 69100 Villeurbanne, FRANCE
+ Midas Server
+ Copyright Kitware SAS, 26 rue Louis Guérin, 69100 Villeurbanne, France.
  All rights reserved.
- More information http://www.kitware.com
+ For more information visit http://www.kitware.com/.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -21,24 +21,26 @@
 require_once BASE_PATH.'/modules/autoregister/models/base/TargetedcommunityModelBase.php';
 require_once BASE_PATH.'/modules/autoregister/models/dao/TargetedcommunityDao.php';
 
-/** PDO model template for the autoregister module */
-class Autoregister_TargetedcommunityModel extends Autoregister_TargetedcommunityModelBase {
-
+/** PDO model template for the autoregister module. */
+class Autoregister_TargetedcommunityModel extends Autoregister_TargetedcommunityModelBase
+{
     /** gets all communities in the autoregister targeted list */
-    public function getAllTargeted() {
+    public function getAllTargeted()
+    {
         $sql = $this->database->select();
         $rowset = $this->database->fetchAll($sql);
         $all = array();
         foreach ($rowset as $row) {
-          $targetedcommunity = $this->initDao('Targetedcommunity', $row, 'autoregister');
-          $all[$targetedcommunity->getCommunityId()] = $targetedcommunity->getCommunity();
+            $targetedcommunity = $this->initDao('Targetedcommunity', $row, 'autoregister');
+            $all[$targetedcommunity->getCommunityId()] = $targetedcommunity->getCommunity();
         }
 
         return $all;
     }
 
     /** gets all communities that aren't in the autoregister targeted list */
-    public function getAllIgnored() {
+    public function getAllIgnored()
+    {
         $communityModel = MidasLoader::loadModel('Community');
         $communities = $communityModel->getAll();
         $targeted = $this->getAllTargeted();
@@ -51,5 +53,4 @@ class Autoregister_TargetedcommunityModel extends Autoregister_Targetedcommunity
 
         return $ignored;
     }
-
 }

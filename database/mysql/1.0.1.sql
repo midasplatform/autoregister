@@ -1,3 +1,7 @@
+-- Midas Server. Copyright Kitware SAS. Licensed under the Apache License 2.0.
+
+-- MySQL database for the autoregister module, version 1.0.1
+
 CREATE TABLE IF NOT EXISTS `autoregister_targetedcommunity` (
     `targetedcommunity_id` bigint(20) NOT NULL AUTO_INCREMENT,
     `community_id` bigint(20) NOT NULL,
