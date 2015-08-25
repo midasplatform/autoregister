@@ -1,9 +1,9 @@
 <?php
 /*=========================================================================
- MIDAS Server
- Copyright (c) Kitware SAS. 26 rue Louis Guérin. 69100 Villeurbanne, FRANCE
+ Midas Server
+ Copyright Kitware SAS, 26 rue Louis Guérin, 69100 Villeurbanne, France.
  All rights reserved.
- More information http://www.kitware.com
+ For more information visit http://www.kitware.com/.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
  limitations under the License.
 =========================================================================*/
 
-
 /** Install the autoregister module. */
 class Autoregister_InstallScript extends MIDASModuleInstallScript
 {
@@ -26,10 +25,10 @@ class Autoregister_InstallScript extends MIDASModuleInstallScript
     public $moduleName = 'autoregister';
 
     /** Post database install. */
-    public function postInstall() {
+    public function postInstall()
+    {
         // default autoregister to false for newly created communities
         $settingModel = MidasLoader::loadModel('Setting');
         $settingModel->setConfig('defaultAutoregister', 'false', 'autoregister');
     }
-
 }

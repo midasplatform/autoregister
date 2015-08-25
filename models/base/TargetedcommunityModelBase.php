@@ -1,9 +1,9 @@
 <?php
 /*=========================================================================
- MIDAS Server
- Copyright (c) Kitware SAS. 26 rue Louis Guérin. 69100 Villeurbanne, FRANCE
+ Midas Server
+ Copyright Kitware SAS, 26 rue Louis Guérin, 69100 Villeurbanne, France.
  All rights reserved.
- More information http://www.kitware.com
+ For more information visit http://www.kitware.com/.
 
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
@@ -18,71 +18,77 @@
  limitations under the License.
 =========================================================================*/
 
-/** Base model class template for the autoregister module */
-abstract class Autoregister_TargetedcommunityModelBase extends Autoregister_AppModel {
+/** Base model class template for the autoregister module. */
+abstract class Autoregister_TargetedcommunityModelBase extends Autoregister_AppModel
+{
+    /** Constructor */
+    public function __construct()
+    {
+        parent::__construct();
+        $this->_name = 'autoregister_targetedcommunity';
+        $this->_key = 'targetedcommunity_id';
 
-  /** Constructor */
-  public function __construct() {
-    parent::__construct();
-    $this->_name = 'autoregister_targetedcommunity';
-    $this->_key = 'targetedcommunity_id';
+        $this->_mainData = array(
+            'targetedcommunity_id' => array('type' => MIDAS_DATA),
+            'community_id' => array('type' => MIDAS_DATA),
+            'creation_date' => array('type' => MIDAS_DATA),
+            'community' => array(
+                'type' => MIDAS_MANY_TO_ONE,
+                'model' => 'Community',
+                'parent_column' => 'community_id',
+                'child_column' => 'community_id',
+            ),
+        );
+        $this->initialize();
+    }
 
-    $this->_mainData = array(
-      'targetedcommunity_id' => array('type' => MIDAS_DATA),
-      'community_id' => array('type' => MIDAS_DATA),
-      'creation_date' => array('type' => MIDAS_DATA),
-      'community' =>  array('type' => MIDAS_MANY_TO_ONE,
-                       'model' => 'Community',
-                       'parent_column' => 'community_id',
-                       'child_column' => 'community_id'));
-    $this->initialize();
-  }
-
-  /** ensures the passed in community is tracked in autoregister target set */
-  public function targetCommunity($community) {
-    $targetedcommunities = $this->findBy('community_id', $community->getCommunityId());
-    if (!$targetedcommunities) {
-        $targetedcommunity = MidasLoader::newDao('TargetedcommunityDao', 'autoregister');
-        $targetedcommunity->setCommunityId($community->getCommunityId());
-        $this->save($targetedcommunity);
-        // now add all users as members
-        $groupModel = MidasLoader::loadModel('Group');
-        $userModel = MidasLoader::loadModel('User');
-        $memberGroup = $community->getMemberGroup();
-        $limit = 50;
-        $offset = 0;
-        while(true) {
-            $users = $userModel->getAll(false, $limit, 'lastname', $offset);
-            foreach ($users as $user) {
-                $groupModel->addUser($memberGroup, $user);
+    /** ensures the passed in community is tracked in autoregister target set */
+    public function targetCommunity($community)
+    {
+        $targetedcommunities = $this->findBy('community_id', $community->getCommunityId());
+        if (!$targetedcommunities) {
+            $targetedcommunity = MidasLoader::newDao('TargetedcommunityDao', 'autoregister');
+            $targetedcommunity->setCommunityId($community->getCommunityId());
+            $this->save($targetedcommunity);
+            // now add all users as members
+            $groupModel = MidasLoader::loadModel('Group');
+            $userModel = MidasLoader::loadModel('User');
+            $memberGroup = $community->getMemberGroup();
+            $limit = 50;
+            $offset = 0;
+            while (true) {
+                $users = $userModel->getAll(false, $limit, 'lastname', $offset);
+                foreach ($users as $user) {
+                    $groupModel->addUser($memberGroup, $user);
+                }
+                if (count($users) < $limit) {
+                    break;
+                } else {
+                    $offset = $offset + $limit;
+                }
             }
-            if (count($users) < $limit) {
-                break;
-            } else {
-                $offset = $offset + $limit;
-            }
+        } else {
+            $targetedcommunity = $targetedcommunities[0];
         }
-     } else {
-        $targetedcommunity = $targetedcommunities[0];
+
+        return $targetedcommunity;
     }
 
-    return $targetedcommunity;
-  }
+    /** ensures the passed in community is ignored in autoregister target set */
+    public function ignoreCommunity($community)
+    {
+        $targetedcommunities = $this->findBy('community_id', $community->getCommunityId());
+        if ($targetedcommunities && count($targetedcommunities) > 0) {
+            $targetedcommunity = $targetedcommunities[0];
+            $this->delete($targetedcommunity);
+        }
 
-  /** ensures the passed in community is ignored in autoregister target set */
-  public function ignoreCommunity($community) {
-    $targetedcommunities = $this->findBy('community_id', $community->getCommunityId());
-    if ($targetedcommunities && count($targetedcommunities) > 0) {
-        $targetedcommunity = $targetedcommunities[0];
-        $this->delete($targetedcommunity);
+        return $targetedcommunity;
     }
 
-    return $targetedcommunity;
-  }
+    /** gets all communities in the autoregister targeted list */
+    abstract public function getAllTargeted();
 
-  /** gets all communities in the autoregister targeted list */
-  abstract public function getAllTargeted();
-  /** gets all communities that aren't in the autoregister targeted list */
-  abstract public function getAllIgnored();
-
+    /** gets all communities that aren't in the autoregister targeted list */
+    abstract public function getAllIgnored();
 }

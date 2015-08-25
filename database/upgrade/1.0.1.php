@@ -37,7 +37,7 @@ class Autoregister_Upgrade_1_0_1 extends MIDASUpgrade
             // register all users to all autoregistered communities
             $limit = 50;
             $offset = 0;
-            while(true) {
+            while (true) {
                 $users = $userModel->getAll(false, $limit, 'lastname', $offset);
                 foreach ($users as $user) {
                     $groupModel->addUser($memberGroup, $user);
